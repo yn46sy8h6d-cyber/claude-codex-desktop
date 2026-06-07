@@ -99,8 +99,8 @@ body {
   letter-spacing: var(--theme-letter-spacing);
   background-color: var(--color-bg);
   color: var(--color-text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
   overflow: hidden;
   user-select: none;
 }
@@ -136,9 +136,17 @@ body {
   outline-offset: 2px;
 }
 
-/* ===== IBM Plex font fallback ===== */
-@supports not (font-variation-settings: normal) {
-  body {
-    font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', BlinkMacSystemFont, sans-serif;
-  }
+/* ===== CJK 字体渲染优化 ===== */
+/* 在深色背景上，-webkit-font-smoothing: antialiased 会导致 CJK 笔画过细/发糊 */
+/* 改用系统默认渲染（auto）让 CJK 在 Retina 屏上更清晰 */
+body {
+  -webkit-font-smoothing: auto;
+}
+/* 对已知 CJK 友好的 font stack 做额外优化 */
+code, pre, .terminal-text {
+  font-family: var(--font-mono);
+}
+/* CJK 文字在深色背景上的笔画加粗，提高可读性 */
+:lang(zh), :lang(ja), :lang(ko) {
+  text-rendering: optimizeLegibility;
 }
